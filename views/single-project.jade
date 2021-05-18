@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    form
+        p Ime:
+            input(type=text, name=name)
+        p Opis:
+            input(type=text, name=description)
+        p Cijena:
+            input(type=number, name=price)
+        p Napravljeno:
+            textarea(name=workdone)
+        p Pocetak:
+            input(type=date, name=start)
+        p Kraj:
+            input(type=date, name=end)

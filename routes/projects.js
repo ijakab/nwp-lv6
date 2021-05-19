@@ -14,17 +14,24 @@ router.get('/json', async function(req, res, next) {
 
 
 router.get('/create', function(req, res, next) {
-    res.render('single-project', { title: 'Unesi novi projek' });
+    res.render('single-project', { project: {} });
 });
 
 router.get('/edit/:id', async function(req, res, next) {
     const single = await mongoose.model('Project').findById(req.params.id)
-    res.send(JSON.stringify(single));
+    res.render('single-project', {project: single});
 });
 
 router.post('/', async function(req, res, next) {
-    await mongoose.model('Project').create(req.body)
-    res.redirect('/projects/create')
+    if (req.body.id) {
+        const doc = await mongoose.model('Project').findById(req.body.id)
+        Object.assign(doc, req.body)
+        await doc.save()
+    } else {
+        await mongoose.model('Project').create(req.body)
+    }
+
+    res.redirect('/projects')
 });
 
 module.exports = router;

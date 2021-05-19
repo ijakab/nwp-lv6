@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    table
+        tr
+            th Ime
+            th Opis
+            th Cijena
+            th Pocetak
+            th Kraj
+            th Akcije
+        each project, index in projects
+            tr
+                td= project.name
+                td= project.description
+                td= project.price
+                td= project.start
+                td= project.end
+                td lalala

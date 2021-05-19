@@ -6,6 +6,6 @@ var blobSchema = new mongoose.Schema({
   workdone: String,
   start: Date,
   end: Date,
-  members: String,
+  members: [String],
 });
 mongoose.model('Project', blobSchema);

@@ -13,6 +13,19 @@ router.get('/json', async function(req, res, next) {
 });
 
 
+router.get('/add-member/:id', function(req, res, next) {
+    res.render('add-member', { project: {id: req.params.id} });
+});
+
+router.post('/add-member', async function(req, res, next) {
+    const project = await mongoose.model('Project').findById(req.body.id)
+    const existing = project.members || []
+    existing.push(req.body.member)
+    project.members = existing
+    await project.save()
+    res.redirect('/projects');
+});
+
 router.get('/create', function(req, res, next) {
     res.render('single-project', { project: {} });
 });

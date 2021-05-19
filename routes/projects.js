@@ -7,10 +7,8 @@ router.get('/create', function(req, res, next) {
 });
 
 router.post('/', async function(req, res, next) {
-    await mongoose.model('Project').create({
-        name : 'testing',
-    })
-    res.send('respond project post');
+    await mongoose.model('Project').create(req.body)
+    res.redirect('/projects/create')
 });
 
 module.exports = router;

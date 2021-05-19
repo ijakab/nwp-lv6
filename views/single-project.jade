@@ -1,16 +1,18 @@
 extends layout
 
 block content
-    form
+    form(action='/projects' method='post')
         p Ime:
-            input(type=text, name=name)
+            input(type='text', name='name')
         p Opis:
-            input(type=text, name=description)
+            input(type='text', name='description')
         p Cijena:
-            input(type=number, name=price)
+            input(type='number', name='price')
         p Napravljeno:
-            textarea(name=workdone)
+            textarea(name='workdone')
         p Pocetak:
-            input(type=date, name=start)
+            input(type='date', name='start')
         p Kraj:
-            input(type=date, name=end)
+            input(type='date', name='end')
+        p
+            input(type='submit' name='submit' value='Posalji')

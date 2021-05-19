@@ -22,6 +22,11 @@ router.get('/edit/:id', async function(req, res, next) {
     res.render('single-project', {project: single});
 });
 
+router.get('/delete/:id', async function(req, res, next) {
+    const single = await mongoose.model('Project').deleteOne({ _id: req.params.id })
+    res.redirect('/projects');
+});
+
 router.post('/', async function(req, res, next) {
     if (req.body.id) {
         const doc = await mongoose.model('Project').findById(req.body.id)

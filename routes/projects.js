@@ -4,7 +4,13 @@ const mongoose = require('mongoose')
 const auth = require('../auth')
 
 router.get('/', async function(req, res, next) {
-    const data = await mongoose.model('Project').find()
+    const user = auth.getUser(req)
+    if (!user) return res.send('You are not logged in')
+
+    const criteria = {}
+    if (req.query.leader === 'true') criteria.leader = user
+    else criteria.participants = user
+    const data = await mongoose.model('Project').find(criteria)
     res.render('list-projects', {projects: data});
 });
 
@@ -23,7 +29,7 @@ router.post('/add-member', async function(req, res, next) {
     const project = await mongoose.model('Project').findById(req.body.id)
     project.participants = req.body.member
     await project.save()
-    res.redirect('/projects');
+    res.redirect('/projects?leader=true&archive=false');
 });
 
 router.get('/create', function(req, res, next) {
@@ -41,7 +47,7 @@ router.get('/edit/:id', async function(req, res, next) {
 
 router.get('/delete/:id', async function(req, res, next) {
     const single = await mongoose.model('Project').deleteOne({ _id: req.params.id })
-    res.redirect('/projects');
+    res.redirect('/projects?leader=true&archive=false');
 });
 
 router.post('/', async function(req, res, next) {
@@ -60,7 +66,7 @@ router.post('/', async function(req, res, next) {
         })
     }
 
-    res.redirect('/projects')
+    res.redirect('/projects?leader=true&archive=false')
 });
 
 module.exports = router;

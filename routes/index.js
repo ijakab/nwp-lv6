@@ -21,7 +21,7 @@ router.post('/login', async function(req, res, next) {
     return res.render('index', { login: true, register: false });
   }
   auth.authorize(user.id, res)
-  res.redirect('/projects');
+  res.redirect('/projects?leader=true&archive=false');
 });
 
 router.get('/logout', async function(req, res, next) {

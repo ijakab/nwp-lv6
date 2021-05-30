@@ -13,3 +13,13 @@ var blobSchema = new mongoose.Schema({
 });
 
 mongoose.model('Project', blobSchema);
+
+async function bla() {
+  console.log('eeeeee')
+  const debugData = await mongoose.model('Project').find({
+    'participants': '60b3c02778b1150a421016d2'
+  }).populate('leader').populate('participants').exec()
+  console.log(debugData);
+}
+
+bla().catch(console.error)

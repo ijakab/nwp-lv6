@@ -7,5 +7,8 @@ html
     nav
       a(href='/') Pocetna |
       a(href='/projects/create') | Unesi |
-      a(href='/projects') | Popis
+      a(href='/projects?leader=true&archive=false') | Popis voditelj |
+      a(href='/projects?leader=false&archive=false') | Popis clan |
+      a(href='/projects?leader=true&archive=true') | Arhiva voditelj |
+      a(href='/projects?leader=false&archive=true') | Arhiva clan
     block content

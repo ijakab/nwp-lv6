@@ -10,6 +10,9 @@ router.get('/', async function(req, res, next) {
     const criteria = {}
     if (req.query.leader === 'true') criteria.leader = user
     else criteria.participants = user
+    if (req.query.archive === 'true') criteria.archived = true
+    else criteria.archived = null
+
     const data = await mongoose.model('Project').find(criteria)
     res.render('list-projects', {projects: data});
 });
@@ -47,6 +50,13 @@ router.get('/edit/:id', async function(req, res, next) {
 
 router.get('/delete/:id', async function(req, res, next) {
     const single = await mongoose.model('Project').deleteOne({ _id: req.params.id })
+    res.redirect('/projects?leader=true&archive=false');
+});
+
+router.get('/archive/:id', async function(req, res, next) {
+    const doc = await mongoose.model('Project').findById(req.params.id)
+    doc.archived = true
+    await doc.save()
     res.redirect('/projects?leader=true&archive=false');
 });
 

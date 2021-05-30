@@ -15,6 +15,13 @@ class Auth {
         const token = req.headers.cookie
         return this._data[token]
     }
+
+    logout(req, res) {
+        const token = req.headers.cookie
+        if (!token) return;
+        delete this._data[token]
+        res.setHeader('set-cookie', '')
+    }
 }
 
 module.exports = new Auth()

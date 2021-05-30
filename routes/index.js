@@ -24,4 +24,9 @@ router.post('/login', async function(req, res, next) {
   res.redirect('/projects');
 });
 
+router.get('/logout', async function(req, res, next) {
+  auth.logout(req, res)
+  res.redirect('/');
+});
+
 module.exports = router;

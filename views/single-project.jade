@@ -18,7 +18,13 @@ block content
         p
             input(type='submit' name='submit' value='Posalji')
 
-    section
-        h2 Clanovi
-        each participant in project.participants
-            li=participant.name
+    if project.leader
+        section
+            h2 Voditelj
+            p= project.leader.name
+
+    if project.participants
+        section
+            h2 Clanovi
+            each participant in project.participants
+                li=participant.name

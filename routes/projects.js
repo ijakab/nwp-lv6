@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose')
+const auth = require('../auth')
 
 router.get('/', async function(req, res, next) {
     const data = await mongoose.model('Project').find()
@@ -33,6 +34,7 @@ router.get('/edit/:id', async function(req, res, next) {
     const single = await mongoose.model('Project')
         .findById(req.params.id)
         .populate('participants')
+        .populate('leader')
         .exec()
     res.render('single-project', {project: single});
 });
@@ -43,12 +45,19 @@ router.get('/delete/:id', async function(req, res, next) {
 });
 
 router.post('/', async function(req, res, next) {
+    const user = auth.getUser(req)
+    if (!user) return res.send('You are not logged in')
+    delete req.body.leader
+
     if (req.body.id) {
         const doc = await mongoose.model('Project').findById(req.body.id)
         Object.assign(doc, req.body)
         await doc.save()
     } else {
-        await mongoose.model('Project').create(req.body)
+        await mongoose.model('Project').create({
+            ...req.body,
+            leader: user
+        })
     }
 
     res.redirect('/projects')

@@ -27,7 +27,7 @@ router.post('/add-member', async function(req, res, next) {
 });
 
 router.get('/create', function(req, res, next) {
-    res.render('single-project', { project: {} });
+    res.render('single-project', { project: {members: []} });
 });
 
 router.get('/edit/:id', async function(req, res, next) {

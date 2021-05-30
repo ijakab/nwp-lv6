@@ -13,15 +13,14 @@ router.get('/json', async function(req, res, next) {
 });
 
 
-router.get('/add-member/:id', function(req, res, next) {
-    res.render('add-member', { project: {id: req.params.id} });
+router.get('/add-member/:id', async function(req, res, next) {
+    const users = await mongoose.model('User').find()
+    res.render('add-member', { project: {id: req.params.id}, users });
 });
 
 router.post('/add-member', async function(req, res, next) {
     const project = await mongoose.model('Project').findById(req.body.id)
-    const existing = project.members || []
-    existing.push(req.body.member)
-    project.members = existing
+    project.participants = req.body.member
     await project.save()
     res.redirect('/projects');
 });
@@ -31,7 +30,10 @@ router.get('/create', function(req, res, next) {
 });
 
 router.get('/edit/:id', async function(req, res, next) {
-    const single = await mongoose.model('Project').findById(req.params.id)
+    const single = await mongoose.model('Project')
+        .findById(req.params.id)
+        .populate('participants')
+        .exec()
     res.render('single-project', {project: single});
 });
 

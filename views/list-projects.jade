@@ -17,7 +17,10 @@ block content
                 td= project.start
                 td= project.end
                 td
-                    a(href='/projects/edit/'+project._id) Edit |
-                    a(href='/projects/delete/'+project._id) | Delete |
-                    a(href='/projects/add-member/'+project._id) | AddMember |
-                    a(href='/projects/archive/'+project._id) | Archive
+                    if isLeader
+                        a(href='/projects/delete/'+project._id) Delete |
+                    if isLeader
+                        a(href='/projects/add-member/'+project._id) | AddMember |
+                    if isLeader
+                        a(href='/projects/archive/'+project._id) | Archive ||
+                    a(href='/projects/edit/'+project._id) Edit

@@ -14,7 +14,7 @@ router.get('/', async function(req, res, next) {
     else criteria.archived = null
 
     const data = await mongoose.model('Project').find(criteria)
-    res.render('list-projects', {projects: data});
+    res.render('list-projects', {projects: data, isLeader: criteria.leader || false});
 });
 
 router.get('/json', async function(req, res, next) {
@@ -40,12 +40,17 @@ router.get('/create', function(req, res, next) {
 });
 
 router.get('/edit/:id', async function(req, res, next) {
+    const user = auth.getUser(req)
+    if (!user) return res.send('You are not logged in')
+
     const single = await mongoose.model('Project')
         .findById(req.params.id)
         .populate('participants')
         .populate('leader')
         .exec()
-    res.render('single-project', {project: single});
+
+    const isLeader = single.leader.id === user
+    res.render('single-project', {project: single, isLeader});
 });
 
 router.get('/delete/:id', async function(req, res, next) {
@@ -67,7 +72,8 @@ router.post('/', async function(req, res, next) {
 
     if (req.body.id) {
         const doc = await mongoose.model('Project').findById(req.body.id)
-        Object.assign(doc, req.body)
+        if (doc.leader && doc.leader.id === user) Object.assign(doc, req.body)
+        else doc.workdone = req.body.workdone
         await doc.save()
     } else {
         await mongoose.model('Project').create({
